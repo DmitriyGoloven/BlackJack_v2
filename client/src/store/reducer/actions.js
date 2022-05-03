@@ -6,6 +6,14 @@ const createRequestAction = (type, payload) => {
     return action;
 }
 
+export const getNewToken = createRequestAction('GET_NEW_TOKEN', (token) => ({
+    request: {
+        method: 'post',
+        url: '/login',
+        token
+    }
+}))
+
 export const getNewGame = createRequestAction('GET_NEW_GAME', () => ({
     request: {
         method: 'get',

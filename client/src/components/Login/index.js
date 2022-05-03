@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
-import Game from "./Game";
+import Login from "./Login";
 import {gameState} from "../../store/reducer/selectors"
-import {getNewGame, hit, stand, reset, getNewToken} from "../../store/reducer/actions";
+import {getNewGame, getNewToken} from "../../store/reducer/actions";
 import {createStructuredSelector} from "reselect";
 
 const mapStateToProp = createStructuredSelector({
@@ -9,10 +9,9 @@ const mapStateToProp = createStructuredSelector({
 })
 
 const mapDispatchToProps = {
+    getNewToken,
     getNewGame,
-    hit,
-    stand,
-    reset
+
 }
 
-export default connect(mapStateToProp, mapDispatchToProps)(Game);
+export default connect(mapStateToProp, mapDispatchToProps)(Login);

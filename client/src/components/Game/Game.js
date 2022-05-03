@@ -4,21 +4,19 @@ import ButtonTable from "../Buttontable/ButtonTable";
 import MainTable from "../Maintable/MainTable";
 import Modal from "../Modal/Modal";
 import Spinner from "../Spinner/Spinner";
-import { useNavigate }  from 'react-router-dom';
+
+
 
 
 const Game = ({getNewGame, hit, stand, gameState, reset}) => {
-    let navigate = useNavigate()
 
     useEffect(() => {
         getNewGame();
-        if (!gameState)
-            return navigate('/login')
+
     }, [reset])
 
-
-
-    if (!gameState)
+console.log(gameState)
+    if (!gameState.activePlayerId)
         return <Spinner/>
 
     return (
