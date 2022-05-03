@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.27.2",
+    "jsonwebtoken": "^8.5.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-redux": "^8.0.0",
@@ -20,7 +21,8 @@
     "redux": "^4.2.0",
     "redux-actions": "^2.6.5",
     "redux-axios-middleware": "^4.0.1",
-    "reselect": "^4.1.5"
+    "reselect": "^4.1.5",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",

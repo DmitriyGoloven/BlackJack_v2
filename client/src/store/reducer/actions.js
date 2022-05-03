@@ -6,12 +6,14 @@ const createRequestAction = (type, payload) => {
     return action;
 }
 
-export const getNewToken = createRequestAction('GET_NEW_TOKEN', (token) => ({
+
+export const getNewToken = createRequestAction('GET_NEW_TOKEN', (players)=>({
     request: {
         method: 'post',
         url: '/login',
-        token
+        data: players
     }
+
 }))
 
 export const getNewGame = createRequestAction('GET_NEW_GAME', () => ({

@@ -44,6 +44,12 @@ const checkGame = (ctx,next)=>{
     return next()
 }
 
+router.post('/api/login',checkTokenMiddleware,(ctx)=> {
+    console.log({player:ctx.request.data})
+    const token = '1token'
+    ctx.body = {game,token}
+})
+
 router.get('/api/game',checkTokenMiddleware,(ctx)=> {
     ctx.body = game
 })

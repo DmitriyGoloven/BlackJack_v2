@@ -1,16 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {Provider} from 'react-redux'
-import {BrowserRouter} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {store} from "./store/store";
-import App from "./components/App"
 import './style/style.scss'
+import Game from "./components/Game";
+import Login from "./components/Login";
+import App from "./components/App";
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
     <BrowserRouter>
         <Provider store={store}>
-            <App/>
+            <Routes>
+                <Route path="/" element={<Game/>}/>
+                <Route path="login" element={<Login/>}/>
+                <Route path="game" element={<Game/>}/>
+            </Routes>
         </Provider>
     </BrowserRouter>
 )
