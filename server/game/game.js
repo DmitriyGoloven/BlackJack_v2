@@ -57,7 +57,6 @@ class Game {
             })
 
             let winner = scoreWinners.indexOf(Math.max(...scoreWinners))
-            console.log(`${this.winners[winner].name}` + ' WINNER')
             this.winner = { name: this.winners[winner].name, scores: this.winners[winner].scores};
         }
     }
@@ -67,7 +66,7 @@ class Game {
             this.activePlayer = this.players[this.players.indexOf(this.activePlayer) + 1];
         } else {
             this.checkWinner()
-            this.players = []
+            // this.players = []
         }
     }
 }

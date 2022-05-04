@@ -2,94 +2,100 @@ const Router = require("@koa/router");
 const Game = require("../game/game");
 const Player = require("../game/player");
 const koaBody = require("koa-body");
+const {createReadStream} = require("fs");
+const jwt = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
 
 const router = new Router();
 
-let game = new Game([new Player("dima")])
-
 const games = {}
 
-const getGameController= (ctx,)=> {
-    // const token = ctx.header['Authorization']
-    // ctx.body = ctx.state.game
+const getGameController = (ctx) => {
+    ctx.body = ctx.state.game;
+}
+
+const hitGameController = (ctx) => {
+    ctx.state.game.hit();
+    ctx.body = ctx.state.game;
+}
+
+const standGameController = (ctx) => {
+    ctx.state.game.stand();
+    ctx.body = ctx.state.game;
+}
+
+const restartGameController = (ctx) => {
+    let players = ctx.state.game.players
+    console.log(players)
+    const session = ctx.state.session
+    const game = new Game(players.map((player) => new Player(player.name)))
+    ctx.state.game = game;
+    games[session.id] = ctx.state.game;
+    ctx.body = ctx.state.game;
+
+
 
 }
 
 const checkTokenMiddleware = (ctx,next)=>{
-    // const token = ctx.header['Authorization']
-    //if(!token){
-    //ctx.status = 401
-    //return}
-
-   // check token exist
-   //  check is token valid
-    //const session = getSessionFromBD()
-   //  if (!session){
-   //      ctx.status = 401
-   //      return
-   //  }
-   //  ctx.state.session = getSessionFromBD()
-    return next()
-}
-
-const checkGame = (ctx,next)=>{
-// check game is true(prover est li game)
-    // const token = ctx.header['Authorization']
-
-
-    // if(!game[session.id]){
-    //     ctx.status = 401
-   // return
-    // }
+    const token = ctx.header.authorization
+    if(!token){
+    ctx.status = 401
+    return}
+    const session = jwt.verify(token, 'MyGame')
+    if (!session){
+        ctx.status = 401
+        return
+    }
+    ctx.state.session = session
     // ctx.state.game = games[session.id]
     return next()
 }
 
-router.post('/api/login',koaBody(),(ctx)=> {
+const checkGame =
+    (ctx, next) => {
+
+        const session = ctx.state.session
+        if (!games[session.id]) {
+            ctx.status = 401;
+            return;
+        }
+        ctx.state.game = games[session.id];
+
+        return next();
+    }
+
+
+const login = (ctx)=> {
     const players = ctx.request.body
-     game = new Game(players.map((name) => new Player(name)))
-    const token = '1token'
+    if (!Array.isArray(players)) {
+        ctx.status = 422;
+        return
+    }
+
+    const session = {id: uuidv4()};
+    const token = jwt.sign(session, 'MyGame');
+    const game = new Game(players.map((name) => new Player(name)))
+    games[session.id] = game
+
     ctx.body = {game,token}
-})
+}
 
-router.get('/api/game',checkTokenMiddleware,(ctx)=> {
-    ctx.body = game
-})
+router.post('/login',koaBody(),login)
 
-router.post('/api/stand',checkTokenMiddleware, checkGame, (ctx) => {
-    // const game = ctx.state.game
-    game.stand();
-    ctx.body = game
-})
+router.post('/game',checkTokenMiddleware,checkGame,getGameController)
 
-router.post('/api/hit',checkTokenMiddleware, (ctx) => {
-    game.hit();
-    ctx.body = game
-})
+router.post('/stand',checkTokenMiddleware, checkGame,  standGameController)
 
-router.post('/api/reset', (ctx) => {
-    game = new Game([new Player(), new Player(), new Player()]);
-    ctx.body = game;
-})
+router.post('/hit',checkTokenMiddleware,checkGame,hitGameController)
+
+router.post('/reset',checkTokenMiddleware,checkGame, restartGameController)
+
+router.get('(.*)',  (ctx) => {
+    ctx.type = 'text/html; charset=UTF-8';
+    ctx.body = createReadStream('./public/static/index.html')})
 
 module.exports = router
 
-const login =(ctx)=>{
 
 
-
-
-
-
-    const players = ctx.request.body.players
-    const players = ["lena","vova"]
-check arr, if !arr ret 422
-
-const session = crateSessionInBD()
-const token = craeteTokenFromsession(session)
-const game =  new Game(players.map((name)=>{new Player(name)}))
-games[session.id] = game
-ctx.body = {
-token: token,
-game: game}
-})
