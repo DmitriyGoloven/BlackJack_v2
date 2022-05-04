@@ -1,10 +1,11 @@
 const Router = require("@koa/router");
 const Game = require("../game/game");
 const Player = require("../game/player");
+const koaBody = require("koa-body");
 
 const router = new Router();
 
-let game = new Game([new Player(), new Player(), new Player()])
+let game = new Game([new Player("dima")])
 
 const games = {}
 
@@ -44,8 +45,9 @@ const checkGame = (ctx,next)=>{
     return next()
 }
 
-router.post('/api/login',checkTokenMiddleware,(ctx)=> {
-    console.log({player:ctx.request.data})
+router.post('/api/login',koaBody(),(ctx)=> {
+    const players = ctx.request.body
+     game = new Game(players.map((name) => new Player(name)))
     const token = '1token'
     ctx.body = {game,token}
 })
@@ -72,16 +74,22 @@ router.post('/api/reset', (ctx) => {
 
 module.exports = router
 
-// router.post ("/login", ()=>{
-//     const players = ctx.request.body.players
-//     const players = ["lena","vova"]
-// check arr, if !arr ret 422
+const login =(ctx)=>{
 
-// const session = crateSessionInBD()
-// const token = craeteTokenFromsession(session)
-// const game =  new Game(players.map((name)=>{new Player(name)}))
-// games[session.id] = game
-//ctx.body = {
-//token: token,
-//game: game}
-// })
+
+
+
+
+
+    const players = ctx.request.body.players
+    const players = ["lena","vova"]
+check arr, if !arr ret 422
+
+const session = crateSessionInBD()
+const token = craeteTokenFromsession(session)
+const game =  new Game(players.map((name)=>{new Player(name)}))
+games[session.id] = game
+ctx.body = {
+token: token,
+game: game}
+})

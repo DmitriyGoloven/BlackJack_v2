@@ -7,11 +7,14 @@ const createRequestAction = (type, payload) => {
 }
 
 
-export const getNewToken = createRequestAction('GET_NEW_TOKEN', (players)=>({
+export const getNewToken = createRequestAction('GET_NEW_TOKEN', (data)=>({
     request: {
         method: 'post',
         url: '/login',
-        data: players
+         data
+        // headers: {
+        //     players: data
+        // },
     }
 
 }))

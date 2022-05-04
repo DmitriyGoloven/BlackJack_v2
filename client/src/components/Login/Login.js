@@ -14,15 +14,21 @@ const Login = ({getNewToken,token}) => {
 
 
     const [title, setTitle] = useState({})
+    const [player, setPlayer] = useState({})
 
 
     const startGame = ()=>{
-        console.log(title)
-        getNewToken(title);
+        // console.log(title,player)
+        let playrt =[title,player]
+
+        getNewToken(playrt);
     }
+
+
     return (
         <div className={'modal'}>
-            <input onChange={event => setTitle({player: event.target.value})}/>
+            <input onChange={event => setTitle(event.target.value)}/>
+            <input onChange={event => setPlayer(event.target.value)}/>
             <button className={'hit'} onClick={startGame}>Start game</button>
         </div>
     )

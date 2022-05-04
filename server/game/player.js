@@ -3,8 +3,9 @@ module.exports = class Player {
     scores = 0;
     cardImg = []
 
-    constructor() {
-        this.name = this.randomName();
+    constructor(name) {
+        this.name = name
+        // this.name = this.randomName();
         this.cards = [];
     }
 

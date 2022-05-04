@@ -17,6 +17,7 @@ const getGameDta = (state, {payload}) => {
 
 const getToken = (state, {payload}) => {
     localStorage.setItem('token', payload.data.token);
+    console.log(payload.data)
     return {...state,
         token: payload.data,
     };
