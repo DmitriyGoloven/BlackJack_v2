@@ -4,7 +4,7 @@ const Player = require("../game/player");
 const koaBody = require("koa-body");
 const {createReadStream} = require("fs");
 const jwt = require('jsonwebtoken');
-const { v4: uuidv4 } = require('uuid');
+const {v4: uuidv4} = require('uuid');
 
 const router = new Router();
 
@@ -26,29 +26,26 @@ const standGameController = (ctx) => {
 
 const restartGameController = (ctx) => {
     let players = ctx.state.game.players
-    console.log(players)
     const session = ctx.state.session
-    const game = new Game(players.map((player) => new Player(player.name)))
+   let game = new Game(players.map((player) => new Player(player.name)))
     ctx.state.game = game;
     games[session.id] = ctx.state.game;
     ctx.body = ctx.state.game;
-
-
-
 }
 
-const checkTokenMiddleware = (ctx,next)=>{
+const checkTokenMiddleware = (ctx, next) => {
     const token = ctx.header.authorization
-    if(!token){
-    ctx.status = 401
-    return}
+    if (!token) {
+        ctx.status = 401
+        return
+    }
     const session = jwt.verify(token, 'MyGame')
-    if (!session){
+    console.log(session)
+    if (!session) {
         ctx.status = 401
         return
     }
     ctx.state.session = session
-    // ctx.state.game = games[session.id]
     return next()
 }
 
@@ -66,7 +63,7 @@ const checkGame =
     }
 
 
-const login = (ctx)=> {
+const login = (ctx) => {
     const players = ctx.request.body
     if (!Array.isArray(players)) {
         ctx.status = 422;
@@ -78,22 +75,23 @@ const login = (ctx)=> {
     const game = new Game(players.map((name) => new Player(name)))
     games[session.id] = game
 
-    ctx.body = {game,token}
+    ctx.body = {game, token}
 }
 
-router.post('/login',koaBody(),login)
+router.post('/login', koaBody(), login)
 
-router.post('/game',checkTokenMiddleware,checkGame,getGameController)
+router.post('/game', checkTokenMiddleware, checkGame, getGameController)
 
-router.post('/stand',checkTokenMiddleware, checkGame,  standGameController)
+router.post('/stand', checkTokenMiddleware, checkGame, standGameController)
 
-router.post('/hit',checkTokenMiddleware,checkGame,hitGameController)
+router.post('/hit', checkTokenMiddleware, checkGame, hitGameController)
 
-router.post('/reset',checkTokenMiddleware,checkGame, restartGameController)
+router.post('/reset', checkTokenMiddleware, checkGame, restartGameController)
 
-router.get('(.*)',  (ctx) => {
+router.get('(.*)', (ctx) => {
     ctx.type = 'text/html; charset=UTF-8';
-    ctx.body = createReadStream('./public/static/index.html')})
+    ctx.body = createReadStream('./public/static/index.html')
+})
 
 module.exports = router
 
