@@ -27,19 +27,22 @@ const standGameController = (ctx) => {
 const restartGameController = (ctx) => {
     let players = ctx.state.game.players
     const session = ctx.state.session
-   let game = new Game(players.map((player) => new Player(player.name)))
+    let game = new Game(players.map((player) => new Player(player.name)))
     ctx.state.game = game;
     games[session.id] = ctx.state.game;
     ctx.body = ctx.state.game;
 }
 
 const checkTokenMiddleware = (ctx, next) => {
+    console.log(ctx.headers)
     const token = ctx.header.authorization
+
     if (!token) {
         ctx.status = 401
         return
     }
     const session = jwt.verify(token, 'MyGame')
+
     if (!session) {
         ctx.status = 401
         return
@@ -52,6 +55,7 @@ const checkGame =
     (ctx, next) => {
 
         const session = ctx.state.session
+
         if (!games[session.id]) {
             ctx.status = 401;
             return;
@@ -64,6 +68,7 @@ const checkGame =
 
 const login = (ctx) => {
     const players = ctx.request.body
+
     if (!Array.isArray(players)) {
         ctx.status = 422;
         return
@@ -78,15 +83,10 @@ const login = (ctx) => {
 }
 
 router.post('/login', koaBody(), login)
-
 router.post('/game', checkTokenMiddleware, checkGame, getGameController)
-
 router.post('/stand', checkTokenMiddleware, checkGame, standGameController)
-
 router.post('/hit', checkTokenMiddleware, checkGame, hitGameController)
-
 router.post('/reset', checkTokenMiddleware, checkGame, restartGameController)
-
 router.get('(.*)', (ctx) => {
     ctx.type = 'text/html; charset=UTF-8';
     ctx.body = createReadStream('./public/static/index.html')
