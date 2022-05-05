@@ -40,7 +40,6 @@ const checkTokenMiddleware = (ctx, next) => {
         return
     }
     const session = jwt.verify(token, 'MyGame')
-    console.log(session)
     if (!session) {
         ctx.status = 401
         return

@@ -49,7 +49,6 @@ class Game {
     checkWinner() {
 
         if (this.winners.length === 0) {
-            console.log( "NO WINNER")
             this.winner = { name: "NO WINNER", scores: "0"}
         } else {
             let scoreWinners = this.winners.map((player) => {
