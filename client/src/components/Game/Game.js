@@ -7,20 +7,19 @@ import Spinner from "../Spinner/Spinner";
 import {useNavigate} from "react-router-dom";
 
 
-const Game = ({getNewGame, hit, stand,token, gameState, reset}) => {
+const Game = ({getNewGame, hit, stand, token, gameState, reset}) => {
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!token)
-            navigate('/login');
-    }, [])
-
-
-    useEffect(() => {
         getNewGame();
 
-    }, [reset])
+    }, [token])
+
+    useEffect(() => {
+        if (!token)
+            navigate('/login');
+    }, [token])
 
 
     if (!gameState.activePlayerId)

@@ -6,7 +6,7 @@ import {store} from "./store/store";
 import './style/style.scss'
 import Game from "./components/Game";
 import Login from "./components/Login";
-import App from "./components/App";
+
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
@@ -14,9 +14,9 @@ root.render(
     <BrowserRouter>
         <Provider store={store}>
             <Routes>
-                <Route path="/" element={<Game/>}/>
-                <Route path="login" element={<Login/>}/>
                 <Route path="game" element={<Game/>}/>
+                <Route path="*" element={<Login/>}/>
+                <Route path="login" element={<Login/>}/>
             </Routes>
         </Provider>
     </BrowserRouter>

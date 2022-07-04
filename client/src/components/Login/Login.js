@@ -1,141 +1,62 @@
 import React from 'react';
-import {useCallback,useState} from "react";
+import {useState} from "react";
 import {Navigate} from "react-router-dom";
-// import { v4 as uuidv4 } from 'uuid';
-
-// const jwt = require("jsonwebtoken")
 
 
-const Login = ({getNewToken,token}) => {
+
+const Login = ({getNewToken, token}) => {
 
     if (token) {
         return <Navigate to="/game"/>
     }
 
+    const [player1, setPlayer1] = useState({})
+    const [player2, setPlayer2] = useState({})
+    const [players, setPlayers] = useState([])
 
-    const [title, setTitle] = useState({})
-    const [player, setPlayer] = useState({})
-
-
-    const startGame = ()=>{
-        // console.log(title,player)
-        let playrt =[title,player]
-
-        getNewToken(playrt);
+    const startGame = () => {
+        let playersArr = [...players, player1, player2]
+        getNewToken(playersArr);
     }
 
+    const changeName = (id, value) => {
+        let newPlayers = [...players];
+        newPlayers[id] = value;
+        setPlayers(newPlayers);
+    }
+
+    const removePlayer = (id) => {
+        setPlayers(players.filter((name, index) => index !== id));
+    }
+
+    const addPlayer = () => {
+        setPlayers([...players, '']);
+    }
 
     return (
-        <div className={'modal'}>
-            <input onChange={event => setTitle(event.target.value)}/>
-            <input onChange={event => setPlayer(event.target.value)}/>
-            <button className={'hit'} onClick={startGame}>Start game</button>
+        <div className={"loginBackground"}>
+            <div className={'modal'}>
+                <p>INPUT PLAYERS</p>
+                <div className={"inputDiv"}>
+                    <input placeholder={'Name'} onChange={event => setPlayer1(event.target.value)}/>
+                </div>
+                <div className={"inputDiv"}>
+                    <input placeholder={'Name'} onChange={event => setPlayer2(event.target.value)}/>
+                </div>
+                {players.map((name, index) => (
+                    <div key={index}>
+                        <input value={name} placeholder={'Name'}
+                               onChange={event => changeName(index, event.target.value)}
+                        />
+                        <button className={"smallButton"} onClick={() => removePlayer(index)}>X</button>
+                    </div>
+                ))
+                }
+                <button className={"smallButton"} onClick={addPlayer}>+</button>
+                <button className={"startButton"} onClick={startGame}>START GAME</button>
+            </div>
         </div>
     )
-
-
 }
-
-//    const players = []
-//
-//     const [inputOne, setInputOne] = useState('');
-//     const [inputTwo, setInputTwo] = useState('');
-//
-//     function addFood() {
-//
-//         let newFood = {
-//             nameFood: inputOne,
-//             calories: inputTwo
-//         };
-//
-//         players.push(newFood);
-//
-//         console.log(players)
-//
-//     }
-//
-//     const getNewTokenGo = (e) => {
-//         e.preventDefault();
-//         console.log(players)
-//         getNewToken(players);
-//     }
-//
-//     return (
-//
-//         <div>
-//
-//             <form onSubmit={getNewTokenGo}>
-//
-//                 Продукт:
-//                 <input
-//                     type="text"
-//                     name='input1'
-//                     value={inputOne}
-//                     onChange={(event) => setInputOne(event.target.value)}
-//                 />
-//
-//                 <input
-//                     type="text"
-//                     name='input2'
-//                     value={inputTwo}
-//                     onChange={(event) => setInputTwo(event.target.value)}
-//                 />
-//
-//                 {/*<input type="submit" value="Отправить" onClick={addFood}/>*/}
-//                 <button  type='submit'>start game</button>
-//             </form>
-//
-//         </div>
-//     )
-//
-// }
-
-
-    // const token = jwt.sign({
-    //     sessionId: "1"},uuidv4()
-    // )
-
-//     const [players, setPlayers] = useState(['','']);
-//
-//     const changeName = (e) => {
-//         setPlayers([...players, e.target.value])}
-//
-//     // const changeName = useCallback((key, value) => {
-//     //
-//     //     let playersArr = [...players];
-//     //     playersArr[key] = value;
-//     //     setPlayers(playersArr);
-//     // }, [players])
-//
-//     const startGame = useCallback(() => {
-//         console.log(players)
-//         getNewToken();
-//     }, [])
-//
-//     const addPlayer = useCallback(() => {
-//         setPlayers([...players, '']);
-//     }, [players])
-//
-//     return (
-//         <div className={'modalBackground'}>
-//             <div className={'modal'}>
-//                 {/*<input  type="text"  onChange={changeName}/>*/}
-//                 {/*<input  type="text" onChange={changeName}/>*/}
-//                 {/*<input  type="text" onChange={changeName}/>*/}
-//                 <h1>Players</h1>
-//                 {players.map((name, index) => (
-//                 <div>
-//                     <input type="text"
-//                            onChange={changeName}
-//                     />
-//                         </div>
-//                     ))
-//                 }
-//                 <button  onClick={addPlayer}>+</button>
-//                 <button type="submit" onChange={changeName} onClick={startGame}>Start game</button>
-//             </div>
-//         </div>
-//     );
-// };
 
 export default Login;

@@ -34,7 +34,7 @@ const restartGameController = (ctx) => {
 }
 
 const checkTokenMiddleware = (ctx, next) => {
-    console.log(ctx.headers)
+    // console.log(ctx.headers)
     const token = ctx.header.authorization
 
     if (!token) {

@@ -3,7 +3,8 @@ import {getNewGame, hit, stand, reset, getNewToken} from "./actions";
 
 const defaultState = {
     players: null,
-    token: null}
+    token: localStorage.getItem('token')
+}
 
 const getGameDta = (state, {payload}) => {
     const {players, activePlayer, winner} = payload.data;
@@ -15,16 +16,17 @@ const getGameDta = (state, {payload}) => {
     }
 }
 
+
 const getToken = (state, {payload}) => {
     localStorage.setItem('token', payload.data.token);
-    console.log(payload.data)
-    return {...state,
+    return {
+        ...state,
         token: payload.data,
     };
 }
 
 export const reducer = handleActions({
-    [getNewToken.success]:getToken,
+    [getNewToken.success]: getToken,
     [getNewGame.success]: getGameDta,
     [hit.success]: getGameDta,
     [stand.success]: getGameDta,

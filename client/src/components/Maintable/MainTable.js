@@ -2,8 +2,6 @@ import React from 'react';
 import Player from "../Player/Player"
 
 const MainTable = ({state}) => {
-    // let myStorage = window.localStorage;
-    // console.log(myStorage)
     return (
         <div className={"mainTable"}>
             <h1>Black Jack</h1>
